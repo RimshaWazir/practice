@@ -3,29 +3,17 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:app/Data/AppData/data.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
   static Map<String, String> _authMiddleWare() {
-    return {};
-    // print(us);
-    //
-    // return us != null
-    //     ? {
-    //         "Authorization": "Bearer $us",
-    //         //'Content-Type': 'application/x-www-form-urlencoded',
-    //         //'Content-Type': 'application/json'
-    //       }
-    //     : {
-    //         'Content-Type': 'application/json',
-    //       };
+    return {'Content-Type': 'application/json'};
   }
 
   static Future<Map<String, dynamic>> get(String url,
       {Map<String, String>? headers}) async {
-    print(url);
-    print(headers.toString());
+    log(url);
+    log(headers.toString());
 
     try {
       http.Response res = await http.get(
@@ -151,14 +139,13 @@ class ApiService {
       String? requestMethod,
       String? imagePathName}) async {
     try {
-      print("Here is body ${body.toString()}");
+      final headers = {
+        'authorization':
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ODZiZTg4NTI3NmQ4MjUxZjc0Y2JjNyIsImlhdCI6MTcwNDM2Mjk5MSwiZXhwIjoxNzA2ODY4NTkxfQ.ckLDK9NbhRr-kOO56yXzAVggmJRH0kN384jXl-N9mjc'
+      };
 
-      print("here is Url$url");
-      print(Data().token);
-      final headers = {'authorization': '${Data().token}'};
       var request =
           http.MultipartRequest(requestMethod ?? 'POST', Uri.parse(url));
-      // request.fields.addAll();
 
       for (var str in body.entries) {
         if (str.value != null) {
@@ -304,7 +291,10 @@ class ApiService {
     String url,
     Map<String, dynamic>? body,
   ) async {
-    final headers = {'authorization': '${Data().token}'};
+    final headers = {
+      'authorization':
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ODZiZTg4NTI3NmQ4MjUxZjc0Y2JjNyIsImlhdCI6MTcwNDM2Mjk5MSwiZXhwIjoxNzA2ODY4NTkxfQ.ckLDK9NbhRr-kOO56yXzAVggmJRH0kN384jXl-N9mjc'
+    };
 
     try {
       print("pa repo ka map $body");
@@ -356,13 +346,17 @@ class ApiService {
       String? requestMethod,
       String? imagePathName}) async {
     try {
-      log("Here is body ${body.toString()}");
+      print("Here is body ${body.toString()}");
 
       print("here is Url$url");
-      print(Data().token);
-      final headers = {'authorization': '${Data().token}'};
+
+      final headers = {
+        'authorization':
+            ' eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ODZiZTg4NTI3NmQ4MjUxZjc0Y2JjNyIsImlhdCI6MTcwNDM2Mjk5MSwiZXhwIjoxNzA2ODY4NTkxfQ.ckLDK9NbhRr-kOO56yXzAVggmJRH0kN384jXl-N9mjc'
+      };
       var request =
           http.MultipartRequest(requestMethod ?? 'PUT', Uri.parse(url));
+      // request.fields.addAll();
 
       for (var str in body.entries) {
         if (str.value != null) {
@@ -423,7 +417,10 @@ class ApiService {
 
   static Future<Map<String, dynamic>> delete(String url,
       {Map<String, String>? headers}) async {
-    final headers = {'authorization': '${Data().token}'};
+    final headers = {
+      'authorization':
+          ' eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ODZiZTg4NTI3NmQ4MjUxZjc0Y2JjNyIsImlhdCI6MTcwNDM2Mjk5MSwiZXhwIjoxNzA2ODY4NTkxfQ.ckLDK9NbhRr-kOO56yXzAVggmJRH0kN384jXl-N9mjc'
+    };
 
     try {
       http.Response res = await http.delete(

@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:app/cubit/upload_cubit.dart';
+import 'package:app/cubit/upload_state.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,21 +20,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Image Upload ',
       home: BlocProvider(
-        create: (context) => ProfileUpdateCubit(),
-        child: const ProfileUpdateScreen(),
+        create: (context) => DummyCubit(),
+        child: const DummyScreen(),
       ),
     );
   }
 }
 
-class ProfileUpdateScreen extends StatefulWidget {
-  const ProfileUpdateScreen({super.key});
+class DummyScreen extends StatefulWidget {
+  const DummyScreen({super.key});
 
   @override
-  _ProfileUpdateScreenState createState() => _ProfileUpdateScreenState();
+  _DummyScreenState createState() => _DummyScreenState();
 }
 
-class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
+class _DummyScreenState extends State<DummyScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? selectedImage;
 
@@ -53,14 +54,12 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
     if (_formKey.currentState!.validate()) {
       if (selectedImage != null) {
         log("message");
+
         var body = {
-          'name': 'name',
+          'name': 'rimsha',
           'numberOfEmployes': 'owner',
         };
-        context.read<ProfileUpdateCubit>().updateProfile(body, selectedImage);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('success fully updated ')),
-        );
+        context.read<DummyCubit>().addData(body: body, images: [selectedImage]);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Image Required')),
@@ -84,9 +83,20 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
               onPressed: _pickImage,
               child: const Text('Pick Image'),
             ),
-            ElevatedButton(
-              onPressed: _update,
-              child: const Text('Update Profile'),
+            BlocConsumer<DummyCubit, DummyState>(
+              listener: (context, state) {
+                if (state is DummyLoading) {
+                  const CircularProgressIndicator();
+                }
+              },
+              builder: (context, state) {
+                return state is DummyLoading
+                    ? const CircularProgressIndicator()
+                    : ElevatedButton(
+                        onPressed: _update,
+                        child: const Text('Update Profile'),
+                      );
+              },
             ),
           ],
         ),
@@ -94,68 +104,3 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
     );
   }
 }
-
-
-// class ProfileUpdateScreen extends StatefulWidget {
-//   const ProfileUpdateScreen({super.key});
-
-//   @override
-//   _ProfileUpdateScreenState createState() => _ProfileUpdateScreenState();
-// }
-
-// class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
-//   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-//   String? selectedImage;
-
-//   void _updateProfile() async {
-//     if (_formKey.currentState!.validate()) {
-//       if (selectedImage != null) {
-//         _update();
-//         log("message");
-//       } else {
-//         final ImagePicker picker = ImagePicker();
-//         final XFile? pickedFile =
-//             await picker.pickImage(source: ImageSource.gallery);
-
-//         if (pickedFile != null) {
-//           setState(() {
-//             selectedImage = pickedFile.path;
-//           });
-//           _update();
-//           log(pickedFile.path);
-//         } else {
-//           ScaffoldMessenger.of(context).showSnackBar(
-//             const SnackBar(content: Text('Image Required')),
-//           );
-//         }
-//       }
-//     }
-//   }
-
-//   void _update() {
-//     var body = {
-//       'name': 'name',
-//       'numberOfEmployes': 'owner',
-//     };
-
-//     context.read<ProfileUpdateCubit>().updateProfile(body, selectedImage);
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Update Profile')),
-//       body: Form(
-//         key: _formKey,
-//         child: Column(
-//           children: [
-//             ElevatedButton(
-//               onPressed: _updateProfile,
-//               child: const Text('Update Profile'),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

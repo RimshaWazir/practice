@@ -1,27 +1,28 @@
 import 'dart:developer';
 
-import 'package:app/ApiServices/api_services.dart';
-import 'package:app/Data/AppData/data.dart';
 import 'package:app/Data/Repository/profile_repo.dart';
+import 'package:app/cubit/upload_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:app/cubit/upload_state.dart';
+class DummyCubit extends Cubit<DummyState> {
+  DummyCubit() : super(DummyInitial());
 
-class ProfileUpdateCubit extends Cubit<ProfileUpdateState> {
-  ProfileUpdateCubit() : super(ProfileUpdateInitial());
+  addData({Map<String, dynamic>? body, List<String?>? images}) async {
+    await Future.delayed(Duration.zero);
 
-  Future<void> updateProfile(
-      Map<String, dynamic> body, String? imagePath) async {
-    emit(ProfileUpdateLoading());
+    emit(DummyLoading());
     try {
-      var response = await ProfileRepository.updateProfile(body, imagePath);
-      if (response['Success']) {
-        emit(ProfileUpdateSuccess());
-      } else {
-        emit(ProfileUpdateError(response['error']));
-      }
+      await DummyRepo.dummyData(body: body, images: images).then((value) {
+        if (value['Success']) {
+          emit(DummyLoaded());
+        }
+      }).catchError((e) {
+        emit(DummyError(error: 'Some Thing Wrong'));
+        throw e;
+      });
     } catch (e) {
-      emit(ProfileUpdateError(e.toString()));
+      emit(DummyError(error: "here is error${e.toString()}"));
+      rethrow;
     }
   }
 }

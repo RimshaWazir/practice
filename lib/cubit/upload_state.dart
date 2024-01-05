@@ -1,12 +1,13 @@
-abstract class ProfileUpdateState {}
+abstract class DummyState {}
 
-class ProfileUpdateInitial extends ProfileUpdateState {}
+class DummyInitial extends DummyState {}
 
-class ProfileUpdateLoading extends ProfileUpdateState {}
+class DummyLoading extends DummyState {}
 
-class ProfileUpdateSuccess extends ProfileUpdateState {}
+class DummyLoaded extends DummyState {}
 
-class ProfileUpdateError extends ProfileUpdateState {
-  final String error;
-  ProfileUpdateError(this.error);
+class DummyError extends DummyState {
+  final String? error;
+
+  DummyError({this.error});
 }
